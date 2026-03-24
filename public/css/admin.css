@@ -1,0 +1,44 @@
+.pink-gradient {
+background: linear-gradient(135deg, #ec4899, #db2777, #be185d);
+}
+
+.pink-glow {
+box-shadow: 0 10px 30px rgba(236, 72, 153, 0.25);
+}
+
+.menu-item {
+position: relative;
+transition: all 0.25s ease;
+}
+
+.menu-item::before {
+content: "";
+position: absolute;
+left: -10px;
+top: 50%;
+transform: translateY(-50%);
+width: 4px;
+height: 0%;
+background: #ec4899;
+border-radius: 10px;
+transition: 0.25s;
+}
+
+.menu-item:hover {
+background: rgba(236, 72, 153, 0.08);
+transform: translateX(4px);
+}
+
+.menu-item:hover::before {
+height: 60%;
+}
+
+.menu-active {
+background: rgba(236, 72, 153, 0.12);
+color: #be185d;
+font-weight: 600;
+}
+
+.menu-active::before {
+height: 70%;
+}
