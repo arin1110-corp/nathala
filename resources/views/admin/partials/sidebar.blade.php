@@ -9,9 +9,9 @@
 
     <!-- Menu -->
     <div class="flex-1 overflow-y-auto px-4 py-4 space-y-2 text-sm">
-        <a href="#" class="menu-item menu-active flex items-center gap-3 px-4 py-2 rounded-lg">🏠
+        <a href="{{ route('admin.dashboard') }}" class="menu-item menu-active flex items-center gap-3 px-4 py-2 rounded-lg">🏠
             Dashboard</a>
-        <a href="#" class="menu-item flex items-center gap-3 px-4 py-2 text-gray-600 rounded-lg">📦
+        <a href="{{ route('admin.product') }}" class="menu-item flex items-center gap-3 px-4 py-2 text-gray-600 rounded-lg">📦
             Products</a>
         <a href="#" class="menu-item flex items-center gap-3 px-4 py-2 text-gray-600 rounded-lg">🛒
             Orders</a>

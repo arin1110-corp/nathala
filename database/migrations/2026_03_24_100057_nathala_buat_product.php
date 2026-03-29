@@ -20,29 +20,43 @@ return new class extends Migration {
             $table->unsignedBigInteger('product_kategori');
             $table->string('product_merk')->nullable();
             $table->string('product_sku')->nullable();
+            $table->string('product_link')->nullable(); // optional external link
+
+            $table->integer('product_total_click')->default(0);
+            $table->enum('product_platform', ['shopee', 'tokopedia', 'tiktok'])->default('shopee');
 
             // Descriptions
             $table->text('product_deskripsi')->nullable(); // final description
             $table->text('product_deskripsi_ringkas')->nullable(); // optional short description
-
-            // AI Fields
-            $table->text('product_ai_description')->nullable(); // hasil AI
-            $table->text('product_ai_prompt')->nullable(); // prompt yang dipakai generate
-            $table->text('product_ai_tags')->nullable(); // keyword AI
 
             // Pricing & Stock
             $table->bigInteger('product_harga')->default(0);
             $table->integer('product_stok')->default(0);
 
             // Status
-            $table->enum('product_status', ['Draft', 'Active', 'Archived'])->default('Draft');
+            $table->enum('product_status', ['draft', 'active', 'archived'])->default('draft');
 
             // SEO
             $table->string('product_meta_title')->nullable();
             $table->text('product_meta_description')->nullable();
             $table->text('product_meta_keywords')->nullable();
 
+            $table->string('product_thumbnail')->nullable();
+            $table->boolean('product_is_index')->default(true);
+            $table->string('product_canonical')->nullable();
+
+            $table->string('product_og_title')->nullable();
+            $table->text('product_og_description')->nullable();
+            $table->string('product_og_image')->nullable();
+
+            $table->integer('product_berat')->nullable();
+            $table->integer('product_terjual')->default(0);
+
+            $table->timestamp('product_published_at')->nullable();
+            $table->json('product_attributes')->nullable();
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

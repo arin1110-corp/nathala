@@ -140,7 +140,8 @@
                     </li>
                 </ul>
             </div>
-
+            <!-- Footer -->
+            @include('admin.partials.footer')
         </main>
 
     </div>
