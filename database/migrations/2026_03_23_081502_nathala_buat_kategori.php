@@ -11,23 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('nathala_slider', function (Blueprint $table) {
+        Schema::create('nathala_kategori', function (Blueprint $table) {
 
-            $table->id('slider_id');
+            $table->id('kategori_id');
 
             /*
             |--------------------------------------------------------------------------
-            | CONTENT
+            | BASIC
             |--------------------------------------------------------------------------
             */
 
-            $table->string('slider_nama')
-                ->nullable(); // internal admin
+            $table->string('kategori_nama');
+            $table->string('kategori_slug')->unique();
 
-            $table->string('slider_judul')
-                ->nullable();
-
-            $table->text('slider_deskripsi')
+            $table->text('kategori_deskripsi')
                 ->nullable();
 
             /*
@@ -36,48 +33,60 @@ return new class extends Migration
             |--------------------------------------------------------------------------
             */
 
-            $table->string('slider_image');
-
-            $table->string('slider_alt_text')
+            $table->string('kategori_thumbnail')
                 ->nullable();
 
             /*
             |--------------------------------------------------------------------------
-            | CTA
+            | STATUS
             |--------------------------------------------------------------------------
             */
 
-            $table->text('slider_link')
-                ->nullable();
+            $table->boolean('kategori_is_active')
+                ->default(true);
 
-            $table->string('slider_button_text')
-                ->nullable();
-
-            /*
-            |--------------------------------------------------------------------------
-            | DISPLAY
-            |--------------------------------------------------------------------------
-            */
-
-            $table->integer('slider_sort_order')
-                ->default(0);
-
-            $table->boolean('slider_is_active')
+            $table->boolean('kategori_is_visible')
                 ->default(true);
 
             /*
             |--------------------------------------------------------------------------
-            | SCHEDULE
+            | SEO
             |--------------------------------------------------------------------------
             */
 
-            $table->timestamp('slider_mulai')
+            $table->string('kategori_meta_title')
                 ->nullable();
 
-            $table->timestamp('slider_selesai')
+            $table->text('kategori_meta_description')
                 ->nullable();
+
+            /*
+            |--------------------------------------------------------------------------
+            | SORTING
+            |--------------------------------------------------------------------------
+            */
+
+            $table->integer('kategori_sort_order')
+                ->default(0);
+
+            /*
+            |--------------------------------------------------------------------------
+            | TIMESTAMP
+            |--------------------------------------------------------------------------
+            */
 
             $table->timestamps();
+            $table->softDeletes();
+
+            /*
+            |--------------------------------------------------------------------------
+            | INDEX
+            |--------------------------------------------------------------------------
+            */
+
+            $table->index('kategori_slug');
+            $table->index('kategori_is_active');
+            $table->index('kategori_sort_order');
         });
     }
 
@@ -86,6 +95,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('nathala_slider');
+        Schema::dropIfExists('nathala_kategori');
     }
 };

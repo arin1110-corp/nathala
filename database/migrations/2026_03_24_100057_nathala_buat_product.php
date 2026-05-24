@@ -4,59 +4,152 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        //
         Schema::create('nathala_product', function (Blueprint $table) {
+
             $table->id('product_id');
 
-            // Basic Info
+            /*
+            |--------------------------------------------------------------------------
+            | BASIC INFO
+            |--------------------------------------------------------------------------
+            */
+
             $table->string('product_nama');
             $table->string('product_slug')->unique();
+
+            // Relasi kategori
             $table->unsignedBigInteger('product_kategori');
+
             $table->string('product_merk')->nullable();
             $table->string('product_sku')->nullable();
-            $table->string('product_link')->nullable(); // optional external link
 
-            $table->integer('product_total_click')->default(0);
-            $table->enum('product_platform', ['shopee', 'tokopedia', 'tiktok'])->default('shopee');
+            /*
+            |--------------------------------------------------------------------------
+            | AFFILIATE
+            |--------------------------------------------------------------------------
+            */
 
-            // Descriptions
-            $table->text('product_deskripsi')->nullable(); // final description
-            $table->text('product_deskripsi_ringkas')->nullable(); // optional short description
+            // Platform affiliate
+            $table->string('product_platform')
+                ->default('shopee');
 
-            // Pricing & Stock
-            $table->bigInteger('product_harga')->default(0);
-            $table->integer('product_stok')->default(0);
+            // Link affiliate
+            $table->text('product_affiliate_link')->nullable();
 
-            // Status
-            $table->enum('product_status', ['draft', 'active', 'archived'])->default('draft');
+            // Link asli marketplace (optional)
+            $table->text('product_original_link')->nullable();
 
-            // SEO
-            $table->string('product_meta_title')->nullable();
-            $table->text('product_meta_description')->nullable();
-            $table->text('product_meta_keywords')->nullable();
+            /*
+            |--------------------------------------------------------------------------
+            | PRODUCT CONTENT
+            |--------------------------------------------------------------------------
+            */
 
+            $table->text('product_deskripsi')->nullable();
+            $table->text('product_deskripsi_ringkas')->nullable();
+
+            /*
+            |--------------------------------------------------------------------------
+            | DISPLAY / MARKETING
+            |--------------------------------------------------------------------------
+            */
+
+            // Harga optional (karena affiliate)
+            $table->bigInteger('product_harga')->nullable();
+
+            // Harga coret / diskon optional
+            $table->bigInteger('product_harga_diskon')->nullable();
+
+            // Thumbnail utama
             $table->string('product_thumbnail')->nullable();
-            $table->boolean('product_is_index')->default(true);
-            $table->string('product_canonical')->nullable();
 
-            $table->string('product_og_title')->nullable();
-            $table->text('product_og_description')->nullable();
-            $table->string('product_og_image')->nullable();
+            // Badge marketing
+            $table->string('product_badge')->nullable();
+            // contoh:
+            // Best Seller, Viral TikTok, Original, Premium
 
-            $table->integer('product_berat')->nullable();
-            $table->integer('product_terjual')->default(0);
+            // Produk unggulan
+            $table->boolean('product_featured')
+                ->default(false);
 
-            $table->timestamp('product_published_at')->nullable();
-            $table->json('product_attributes')->nullable();
+            /*
+            |--------------------------------------------------------------------------
+            | ANALYTICS
+            |--------------------------------------------------------------------------
+            */
+
+            $table->integer('product_total_click')
+                ->default(0)
+                ->index();
+
+            $table->integer('product_terjual')
+                ->default(0);
+
+            /*
+            |--------------------------------------------------------------------------
+            | STATUS
+            |--------------------------------------------------------------------------
+            */
+
+            $table->enum('product_status', [
+                'draft',
+                'active',
+                'archived'
+            ])->default('draft');
+
+            $table->timestamp('product_published_at')
+                ->nullable();
+
+            /*
+            |--------------------------------------------------------------------------
+            | SEO BASIC
+            |--------------------------------------------------------------------------
+            */
+
+            $table->string('product_meta_title')
+                ->nullable();
+
+            $table->text('product_meta_description')
+                ->nullable();
+
+            $table->boolean('product_is_index')
+                ->default(true);
+
+            /*
+            |--------------------------------------------------------------------------
+            | EXTRA ATTRIBUTE (Flexible)
+            |--------------------------------------------------------------------------
+            */
+
+            $table->json('product_attributes')
+                ->nullable();
+
+            /*
+            |--------------------------------------------------------------------------
+            | TIMESTAMP
+            |--------------------------------------------------------------------------
+            */
 
             $table->timestamps();
             $table->softDeletes();
+
+            /*
+            |--------------------------------------------------------------------------
+            | FOREIGN KEY
+            |--------------------------------------------------------------------------
+            */
+
+            $table->foreign('product_kategori')
+                ->references('kategori_id')
+                ->on('nathala_kategori')
+                ->cascadeOnDelete();
         });
     }
 
@@ -65,7 +158,10 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        //
+        Schema::table('nathala_product', function (Blueprint $table) {
+            $table->dropForeign(['product_kategori']);
+        });
+
         Schema::dropIfExists('nathala_product');
     }
 };

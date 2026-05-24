@@ -11,73 +11,81 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('nathala_slider', function (Blueprint $table) {
+        Schema::create('nathala_admin', function (Blueprint $table) {
 
-            $table->id('slider_id');
-
-            /*
-            |--------------------------------------------------------------------------
-            | CONTENT
-            |--------------------------------------------------------------------------
-            */
-
-            $table->string('slider_nama')
-                ->nullable(); // internal admin
-
-            $table->string('slider_judul')
-                ->nullable();
-
-            $table->text('slider_deskripsi')
-                ->nullable();
+            $table->id('admin_id');
 
             /*
             |--------------------------------------------------------------------------
-            | IMAGE
+            | BASIC
             |--------------------------------------------------------------------------
             */
 
-            $table->string('slider_image');
+            $table->string('admin_nama');
 
-            $table->string('slider_alt_text')
-                ->nullable();
+            $table->string('admin_username')
+                ->unique();
+
+            $table->string('admin_email')
+                ->unique();
+
+            $table->string('admin_password');
 
             /*
             |--------------------------------------------------------------------------
-            | CTA
+            | PROFILE
             |--------------------------------------------------------------------------
             */
 
-            $table->text('slider_link')
+            $table->string('admin_foto')
                 ->nullable();
 
-            $table->string('slider_button_text')
+            $table->string('admin_phone')
                 ->nullable();
 
             /*
             |--------------------------------------------------------------------------
-            | DISPLAY
+            | ROLE
             |--------------------------------------------------------------------------
             */
 
-            $table->integer('slider_sort_order')
-                ->default(0);
+            $table->enum('admin_role', [
+                'superadmin',
+                'admin'
+            ])->default('admin');
 
-            $table->boolean('slider_is_active')
+            /*
+            |--------------------------------------------------------------------------
+            | STATUS
+            |--------------------------------------------------------------------------
+            */
+
+            $table->boolean('admin_is_active')
                 ->default(true);
 
+            $table->timestamp('admin_last_login')
+                ->nullable();
+
             /*
             |--------------------------------------------------------------------------
-            | SCHEDULE
+            | REMEMBER TOKEN
             |--------------------------------------------------------------------------
             */
 
-            $table->timestamp('slider_mulai')
-                ->nullable();
-
-            $table->timestamp('slider_selesai')
-                ->nullable();
+            $table->rememberToken();
 
             $table->timestamps();
+            $table->softDeletes();
+
+            /*
+            |--------------------------------------------------------------------------
+            | INDEX
+            |--------------------------------------------------------------------------
+            */
+
+            $table->index('admin_username');
+            $table->index('admin_email');
+            $table->index('admin_role');
         });
     }
 
@@ -86,6 +94,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('nathala_slider');
+        Schema::dropIfExists('nathala_admin');
     }
 };

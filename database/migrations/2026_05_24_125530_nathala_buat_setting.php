@@ -6,86 +6,79 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('nathala_slider', function (Blueprint $table) {
+        Schema::create('nathala_setting', function (Blueprint $table) {
 
-            $table->id('slider_id');
-
-            /*
-            |--------------------------------------------------------------------------
-            | CONTENT
-            |--------------------------------------------------------------------------
-            */
-
-            $table->string('slider_nama')
-                ->nullable(); // internal admin
-
-            $table->string('slider_judul')
-                ->nullable();
-
-            $table->text('slider_deskripsi')
-                ->nullable();
+            $table->id('setting_id');
 
             /*
             |--------------------------------------------------------------------------
-            | IMAGE
+            | SITE INFO
             |--------------------------------------------------------------------------
             */
 
-            $table->string('slider_image');
-
-            $table->string('slider_alt_text')
-                ->nullable();
+            $table->string('site_name')->nullable();
+            $table->string('site_tagline')->nullable();
+            $table->text('site_description')->nullable();
 
             /*
             |--------------------------------------------------------------------------
-            | CTA
+            | BRANDING
             |--------------------------------------------------------------------------
             */
 
-            $table->text('slider_link')
-                ->nullable();
-
-            $table->string('slider_button_text')
-                ->nullable();
+            $table->string('site_logo')->nullable();
+            $table->string('site_favicon')->nullable();
 
             /*
             |--------------------------------------------------------------------------
-            | DISPLAY
+            | CONTACT
             |--------------------------------------------------------------------------
             */
 
-            $table->integer('slider_sort_order')
-                ->default(0);
-
-            $table->boolean('slider_is_active')
-                ->default(true);
+            $table->string('site_email')->nullable();
+            $table->string('site_phone')->nullable();
+            $table->string('site_whatsapp')->nullable();
 
             /*
             |--------------------------------------------------------------------------
-            | SCHEDULE
+            | SOCIAL
             |--------------------------------------------------------------------------
             */
 
-            $table->timestamp('slider_mulai')
+            $table->string('site_instagram')->nullable();
+            $table->string('site_tiktok')->nullable();
+            $table->string('site_youtube')->nullable();
+            $table->string('site_facebook')->nullable();
+
+            /*
+            |--------------------------------------------------------------------------
+            | SEO
+            |--------------------------------------------------------------------------
+            */
+
+            $table->string('site_meta_title')->nullable();
+            $table->text('site_meta_description')->nullable();
+
+            /*
+            |--------------------------------------------------------------------------
+            | TRACKING SCRIPT
+            |--------------------------------------------------------------------------
+            */
+
+            $table->longText('site_google_analytics')
                 ->nullable();
 
-            $table->timestamp('slider_selesai')
+            $table->longText('site_meta_pixel')
                 ->nullable();
 
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('nathala_slider');
+        Schema::dropIfExists('nathala_setting');
     }
 };
