@@ -30,5 +30,10 @@ class ModelSetting extends Model
         'site_meta_description',
         'site_google_analytics',
         'site_meta_pixel',
+        'theme_primary',
+        'theme_secondary',
+        'theme_accent',
+        'theme_text',
+        'theme_footer',
     ];
 }
