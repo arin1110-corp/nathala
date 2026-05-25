@@ -5,11 +5,16 @@
 
 @section('content')
 
+@php
+    $primary = $setting->theme_primary ?? '#ec4899';
+@endphp
+
 <div class="flex justify-between mb-6">
     <h1 class="text-2xl font-bold">Slider</h1>
 
     <a href="{{ route('admin.slider.create') }}"
-       class="bg-pink-500 text-white px-4 py-2 rounded-2xl">
+       class="text-white px-4 py-2 rounded-2xl"
+       style="background: {{ $primary }};">
         + Tambah Slider
     </a>
 </div>
@@ -20,13 +25,15 @@
     </div>
 @endif
 
-<div class="bg-white/70 backdrop-blur-xl border border-pink-100 rounded-2xl p-4 overflow-x-auto">
+<div class="bg-white/80 backdrop-blur-xl border rounded-2xl p-4 overflow-x-auto"
+     style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">
+
     <table id="sliderTable" class="w-full text-sm">
         <thead>
             <tr class="text-left border-b">
                 <th class="p-3">Image</th>
                 <th class="p-3">Judul</th>
-                <th class="p-3">Posisi</th>
+                <th class="p-3">Button</th>
                 <th class="p-3">Sort</th>
                 <th class="p-3">Status</th>
                 <th class="p-3">Action</th>
@@ -35,13 +42,15 @@
 
         <tbody>
             @foreach($data as $item)
-                <tr class="border-b hover:bg-pink-50/30">
+                <tr class="border-b hover:bg-gray-50">
+
                     <td class="p-3">
                         @if($item->slider_image)
                             <img src="{{ asset($item->slider_image) }}"
                                  class="w-20 h-12 rounded-xl object-cover">
                         @else
-                            <div class="w-20 h-12 bg-pink-100 rounded-xl"></div>
+                            <div class="w-20 h-12 rounded-xl"
+                                 style="background: color-mix(in srgb, {{ $primary }} 12%, white);"></div>
                         @endif
                     </td>
 
@@ -50,7 +59,7 @@
                     </td>
 
                     <td class="p-3">
-                        {{ ucfirst($item->slider_posisi) }}
+                        {{ $item->slider_button_text ?? '-' }}
                     </td>
 
                     <td class="p-3">
@@ -70,8 +79,10 @@
                     </td>
 
                     <td class="p-3 flex gap-2">
+
                         <a href="{{ route('admin.slider.edit', $item->slider_id) }}"
-                           class="px-3 py-1 bg-blue-100 text-blue-600 rounded-xl text-xs">
+                           class="px-3 py-1 rounded-xl text-xs"
+                           style="background: color-mix(in srgb, {{ $primary }} 12%, white); color: {{ $primary }};">
                             Edit
                         </a>
 
@@ -99,6 +110,7 @@
                                 Hapus
                             </button>
                         </form>
+
                     </td>
                 </tr>
             @endforeach

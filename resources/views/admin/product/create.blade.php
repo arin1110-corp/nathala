@@ -1,70 +1,106 @@
 @extends('admin.layouts.app')
 
 @section('title', 'Tambah Product')
+@section('page_title', 'Tambah Product')
 
 @section('content')
 
-<h1 class="text-2xl font-bold mb-6">Tambah Product</h1>
+@php
+    $primary = $setting->theme_primary ?? '#ec4899';
+@endphp
 
 <form method="POST"
       action="{{ route('admin.product.store') }}"
       enctype="multipart/form-data"
-      class="space-y-4 bg-white/70 p-6 rounded-2xl border border-pink-100">
+      class="space-y-5 bg-white/80 backdrop-blur-xl p-6 rounded-2xl border"
+      style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">
 
     @csrf
 
-    <input type="text" name="product_nama"
-           placeholder="Nama Product"
-           class="w-full p-3 border rounded-xl">
+    <div>
+        <label class="text-sm text-gray-600">Nama Product</label>
+        <input type="text"
+               name="product_nama"
+               placeholder="Nama Product"
+               class="w-full p-3 border border-gray-200 rounded-xl">
+    </div>
 
-    <select name="product_kategori"
-            class="w-full p-3 border rounded-xl">
+    <div>
+        <label class="text-sm text-gray-600">Kategori</label>
+        <select name="product_kategori"
+                class="w-full p-3 border border-gray-200 rounded-xl bg-white">
 
-        <option value="">Pilih Kategori</option>
+            <option value="">Pilih Kategori</option>
 
-        @foreach($kategori as $k)
-            <option value="{{ $k->kategori_id }}">
-                {{ $k->kategori_nama }}
-            </option>
-        @endforeach
+            @foreach($kategori as $k)
+                <option value="{{ $k->kategori_id }}">
+                    {{ $k->kategori_nama }}
+                </option>
+            @endforeach
 
-    </select>
+        </select>
+    </div>
 
-    <input type="text" name="product_merk"
-           placeholder="Merk"
-           class="w-full p-3 border rounded-xl">
+    <div>
+        <label class="text-sm text-gray-600">Merk</label>
+        <input type="text"
+               name="product_merk"
+               placeholder="Merk"
+               class="w-full p-3 border border-gray-200 rounded-xl">
+    </div>
 
-    <input type="text" name="product_affiliate_link"
-           placeholder="Affiliate Link"
-           class="w-full p-3 border rounded-xl">
+    <div>
+        <label class="text-sm text-gray-600">Affiliate Link</label>
+        <input type="text"
+               name="product_affiliate_link"
+               placeholder="https://..."
+               class="w-full p-3 border border-gray-200 rounded-xl">
+    </div>
 
-    <input type="number" name="product_harga"
-           placeholder="Harga"
-           class="w-full p-3 border rounded-xl">
+    <div>
+        <label class="text-sm text-gray-600">Harga</label>
+        <input type="number"
+               name="product_harga"
+               placeholder="Harga"
+               class="w-full p-3 border border-gray-200 rounded-xl">
+    </div>
 
-    <textarea name="product_deskripsi"
-              placeholder="Deskripsi"
-              class="w-full p-3 border rounded-xl"></textarea>
+    <div>
+        <label class="text-sm text-gray-600">Deskripsi</label>
+        <textarea name="product_deskripsi"
+                  rows="5"
+                  placeholder="Deskripsi Product"
+                  class="w-full p-3 border border-gray-200 rounded-xl"></textarea>
+    </div>
 
-    <input type="file" name="product_thumbnail"
-           class="w-full p-3 border rounded-xl">
+    <div>
+        <label class="text-sm text-gray-600">Thumbnail</label>
+        <input type="file"
+               name="product_thumbnail"
+               class="w-full p-3 border border-gray-200 rounded-xl bg-white">
+    </div>
 
-    {{-- FEATURED --}}
     <label class="flex items-center gap-2">
-        <input type="checkbox" name="product_featured">
+        <input type="checkbox"
+               name="product_featured"
+               value="1"
+               style="accent-color: {{ $primary }};">
         Featured Product
     </label>
 
-    {{-- STATUS --}}
-    <select name="product_status"
-            class="w-full p-3 border rounded-xl">
-        <option value="draft">Draft</option>
-        <option value="active">Active</option>
-        <option value="archived">Archived</option>
-    </select>
+    <div>
+        <label class="text-sm text-gray-600">Status</label>
+        <select name="product_status"
+                class="w-full p-3 border border-gray-200 rounded-xl bg-white">
+            <option value="draft">Draft</option>
+            <option value="active">Active</option>
+            <option value="archived">Archived</option>
+        </select>
+    </div>
 
-    <button class="bg-pink-500 text-white px-6 py-2 rounded-xl">
-        Simpan
+    <button class="text-white px-6 py-2 rounded-xl"
+            style="background: {{ $primary }};">
+        Simpan Product
     </button>
 
 </form>

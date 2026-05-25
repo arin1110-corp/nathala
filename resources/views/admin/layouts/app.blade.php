@@ -5,12 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>@yield('title', 'Admin Dashboard')</title>
+    <title>
+        @yield('title', 'Admin Dashboard') - {{ $setting->site_name ?? 'Nathala CMS' }}
+    </title>
+
+    @if (!empty($setting->site_favicon))
+        <link rel="icon" href="{{ asset($setting->site_favicon) }}">
+    @endif
 
     {{-- Tailwind --}}
     <script src="https://cdn.tailwindcss.com"></script>
 
-    {{-- jQuery (WAJIB PALING ATAS) --}}
+    {{-- jQuery --}}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     {{-- DataTables --}}
@@ -44,12 +50,8 @@
             @include('admin.partials.footer-new')
 
         </div>
-    </div>
 
-    {{-- scripts --}}
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    </div>
 
     <script>
         lucide.createIcons();

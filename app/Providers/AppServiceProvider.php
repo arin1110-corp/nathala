@@ -28,5 +28,13 @@ class AppServiceProvider extends ServiceProvider
                 'menus' => $menus,
             ]);
         });
+
+        View::composer('admin.*', function ($view) {
+            $setting = ModelSetting::first();
+
+            $view->with([
+                'setting' => $setting,
+            ]);
+        });
     }
 }

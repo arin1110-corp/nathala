@@ -5,11 +5,16 @@
 
 @section('content')
 
+@php
+    $primary = $setting->theme_primary ?? '#ec4899';
+@endphp
+
 <div class="flex justify-between mb-6">
     <h1 class="text-2xl font-bold">Menu Builder</h1>
 
     <a href="{{ route('admin.menu.create') }}"
-       class="bg-pink-500 text-white px-4 py-2 rounded-2xl">
+       class="text-white px-4 py-2 rounded-2xl"
+       style="background: {{ $primary }};">
         + Tambah Menu
     </a>
 </div>
@@ -20,7 +25,8 @@
     </div>
 @endif
 
-<div class="bg-white/70 backdrop-blur-xl border border-pink-100 rounded-2xl p-4 overflow-x-auto">
+<div class="bg-white/80 backdrop-blur-xl border rounded-2xl p-4 overflow-x-auto"
+     style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">
 
     <table id="menuTable" class="w-full text-sm">
 
@@ -36,9 +42,8 @@
         </thead>
 
         <tbody>
-
             @foreach($data as $item)
-                <tr class="border-b hover:bg-pink-50/30">
+                <tr class="border-b hover:bg-gray-50">
 
                     <td class="p-3 font-medium">
                         {{ $item->menu_nama }}
@@ -49,7 +54,8 @@
                     </td>
 
                     <td class="p-3">
-                        <span class="px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-xl">
+                        <span class="px-2 py-1 text-xs rounded-xl"
+                              style="background: color-mix(in srgb, {{ $primary }} 12%, white); color: {{ $primary }};">
                             {{ $item->menu_target }}
                         </span>
                     </td>
@@ -73,7 +79,8 @@
                     <td class="p-3 flex gap-2">
 
                         <a href="{{ route('admin.menu.edit', $item->menu_id) }}"
-                           class="px-3 py-1 bg-blue-100 text-blue-600 rounded-xl text-xs">
+                           class="px-3 py-1 rounded-xl text-xs"
+                           style="background: color-mix(in srgb, {{ $primary }} 12%, white); color: {{ $primary }};">
                             Edit
                         </a>
 
@@ -106,7 +113,6 @@
 
                 </tr>
             @endforeach
-
         </tbody>
 
     </table>

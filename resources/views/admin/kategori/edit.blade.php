@@ -5,73 +5,118 @@
 
 @section('content')
 
-<form method="POST" action="{{ route('admin.kategori.update', $item->kategori_id) }}"
+@php
+    $primary = $setting->theme_primary ?? '#ec4899';
+@endphp
+
+<form method="POST"
+      action="{{ route('admin.kategori.update', $item->kategori_id) }}"
       enctype="multipart/form-data"
-      class="bg-white/70 backdrop-blur-xl p-6 rounded-2xl border border-pink-100 space-y-4">
+      class="bg-white/80 backdrop-blur-xl p-6 rounded-3xl border shadow-sm space-y-5"
+      style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">
 
     @csrf
     @method('PUT')
 
-    {{-- NAMA --}}
     <div>
-        <label>Nama Kategori</label>
-        <input type="text" name="kategori_nama"
+        <label class="block text-sm font-medium text-gray-600 mb-2">
+            Nama Kategori
+        </label>
+        <input type="text"
+               name="kategori_nama"
                value="{{ $item->kategori_nama }}"
-               class="w-full p-3 rounded-xl border border-pink-100">
+               class="w-full p-3 rounded-2xl border"
+               style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">
     </div>
 
-    {{-- DESKRIPSI --}}
     <div>
-        <label>Deskripsi</label>
+        <label class="block text-sm font-medium text-gray-600 mb-2">
+            Deskripsi
+        </label>
         <textarea name="kategori_deskripsi"
-                  class="w-full p-3 rounded-xl border border-pink-100">{{ $item->kategori_deskripsi }}</textarea>
+                  rows="4"
+                  class="w-full p-3 rounded-2xl border"
+                  style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">{{ $item->kategori_deskripsi }}</textarea>
     </div>
 
-    {{-- THUMBNAIL --}}
     <div>
-        <label>Thumbnail</label>
-        <input type="file" name="kategori_thumbnail"
-               class="w-full p-3 rounded-xl border border-pink-100 bg-white">
+        <label class="block text-sm font-medium text-gray-600 mb-2">
+            Thumbnail
+        </label>
+        <input type="file"
+               name="kategori_thumbnail"
+               class="w-full p-3 rounded-2xl border bg-white"
+               style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">
 
         @if($item->kategori_thumbnail)
             <img src="{{ asset($item->kategori_thumbnail) }}"
-                 class="w-20 h-20 mt-2 rounded-xl object-cover">
+                 class="w-24 h-24 mt-3 rounded-2xl object-cover">
         @endif
     </div>
 
+    <div class="flex items-center gap-3 p-4 rounded-2xl"
+         style="background: color-mix(in srgb, {{ $primary }} 6%, white);">
 
-    {{-- VISIBILITY --}}
-    <div class="flex items-center gap-2">
-        <input type="checkbox" name="kategori_is_visible" value="1"
-               {{ $item->kategori_is_visible ? 'checked' : '' }}>
-        <label>Visible</label>
+        <input type="checkbox"
+               name="kategori_is_visible"
+               value="1"
+               {{ $item->kategori_is_visible ? 'checked' : '' }}
+               class="w-5 h-5"
+               style="accent-color: {{ $primary }};">
+
+        <label class="text-sm font-medium text-gray-700">
+            Visible
+        </label>
     </div>
 
-    {{-- SEO --}}
-    <div>
-        <label>Meta Title</label>
-        <input type="text" name="kategori_meta_title"
-               value="{{ $item->kategori_meta_title }}"
-               class="w-full p-3 rounded-xl border border-pink-100">
+    <div class="pt-4 border-t"
+         style="border-color: color-mix(in srgb, {{ $primary }} 10%, white);">
+        <h3 class="text-lg font-bold mb-4"
+            style="color: {{ $primary }};">
+            SEO Setting
+        </h3>
+
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-600 mb-2">
+                    Meta Title
+                </label>
+                <input type="text"
+                       name="kategori_meta_title"
+                       value="{{ $item->kategori_meta_title }}"
+                       class="w-full p-3 rounded-2xl border"
+                       style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-600 mb-2">
+                    Meta Description
+                </label>
+                <textarea name="kategori_meta_description"
+                          rows="3"
+                          class="w-full p-3 rounded-2xl border"
+                          style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">{{ $item->kategori_meta_description }}</textarea>
+            </div>
+        </div>
     </div>
 
     <div>
-        <label>Meta Description</label>
-        <textarea name="kategori_meta_description"
-                  class="w-full p-3 rounded-xl border border-pink-100">{{ $item->kategori_meta_description }}</textarea>
-    </div>
-
-    {{-- SORT --}}
-    <div>
-        <label>Sort Order</label>
-        <input type="number" name="kategori_sort_order"
+        <label class="block text-sm font-medium text-gray-600 mb-2">
+            Sort Order
+        </label>
+        <input type="number"
+               name="kategori_sort_order"
                value="{{ $item->kategori_sort_order }}"
-               class="w-full p-3 rounded-xl border border-pink-100">
+               class="w-full p-3 rounded-2xl border"
+               style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">
     </div>
 
-    <button class="bg-blue-500 text-white px-6 py-2 rounded-xl">
-        Update
-    </button>
+    <div class="pt-4">
+        <button class="text-white px-6 py-3 rounded-2xl font-medium shadow hover:opacity-90 transition"
+                style="background: {{ $primary }};">
+            Update Kategori
+        </button>
+    </div>
 
 </form>
 

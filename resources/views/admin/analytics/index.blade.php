@@ -5,31 +5,40 @@
 
 @section('content')
 
+@php
+    $primary = $setting->theme_primary ?? '#ec4899';
+    $accent = $setting->theme_accent ?? '#f43f5e';
+@endphp
+
 {{-- SUMMARY --}}
 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
 
-    <div class="bg-white/70 backdrop-blur-xl border border-pink-100 rounded-2xl p-6">
+    <div class="bg-white/80 backdrop-blur-xl border rounded-2xl p-6"
+         style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">
         <p class="text-sm text-gray-500">Total Click</p>
-        <h2 class="text-3xl font-bold text-pink-500">
+        <h2 class="text-3xl font-bold" style="color: {{ $primary }};">
             {{ number_format($totalClick) }}
         </h2>
     </div>
 
-    <div class="bg-white/70 backdrop-blur-xl border border-pink-100 rounded-2xl p-6">
+    <div class="bg-white/80 backdrop-blur-xl border rounded-2xl p-6"
+         style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">
         <p class="text-sm text-gray-500">Total Product</p>
         <h2 class="text-3xl font-bold text-gray-800">
             {{ number_format($totalProduct) }}
         </h2>
     </div>
 
-    <div class="bg-white/70 backdrop-blur-xl border border-pink-100 rounded-2xl p-6">
+    <div class="bg-white/80 backdrop-blur-xl border rounded-2xl p-6"
+         style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">
         <p class="text-sm text-gray-500">Featured Product</p>
         <h2 class="text-3xl font-bold text-yellow-500">
             {{ number_format($featuredCount) }}
         </h2>
     </div>
 
-    <div class="bg-white/70 backdrop-blur-xl border border-pink-100 rounded-2xl p-6">
+    <div class="bg-white/80 backdrop-blur-xl border rounded-2xl p-6"
+         style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">
         <p class="text-sm text-gray-500">Total Terjual</p>
         <h2 class="text-3xl font-bold text-green-500">
             {{ number_format($totalSales) }}
@@ -39,13 +48,17 @@
 </div>
 
 {{-- TOP PRODUCT --}}
-<div class="bg-white/70 backdrop-blur-xl border border-pink-100 rounded-2xl p-6 mb-8">
+<div class="bg-white/80 backdrop-blur-xl border rounded-2xl p-6 mb-8"
+     style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">
     <h3 class="text-lg font-bold mb-2">Top Product</h3>
 
     <div class="flex items-center gap-4">
         @if($topProduct && $topProduct->product_thumbnail)
             <img src="{{ asset($topProduct->product_thumbnail) }}"
                  class="w-20 h-20 rounded-xl object-cover">
+        @else
+            <div class="w-20 h-20 rounded-xl"
+                 style="background: color-mix(in srgb, {{ $primary }} 12%, white);"></div>
         @endif
 
         <div>
@@ -53,7 +66,7 @@
                 {{ $topProduct->product_nama ?? '-' }}
             </h4>
 
-            <p class="text-pink-500 font-semibold">
+            <p class="font-semibold" style="color: {{ $primary }};">
                 {{ number_format($topProduct->product_total_click ?? 0) }} clicks
             </p>
         </div>
@@ -61,13 +74,15 @@
 </div>
 
 {{-- CHART --}}
-<div class="bg-white/70 backdrop-blur-xl border border-pink-100 rounded-2xl p-6 mb-8">
+<div class="bg-white/80 backdrop-blur-xl border rounded-2xl p-6 mb-8"
+     style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">
     <h3 class="text-lg font-bold mb-4">Product Click Chart</h3>
     <canvas id="clickChart"></canvas>
 </div>
 
 {{-- TABLE --}}
-<div class="bg-white/70 backdrop-blur-xl border border-pink-100 rounded-2xl p-4 overflow-x-auto">
+<div class="bg-white/80 backdrop-blur-xl border rounded-2xl p-4 overflow-x-auto"
+     style="border-color: color-mix(in srgb, {{ $primary }} 15%, white);">
     <table id="analyticsTable" class="w-full text-sm">
         <thead>
             <tr class="text-left border-b">
@@ -82,7 +97,7 @@
 
         <tbody>
             @foreach($data as $item)
-                <tr class="border-b hover:bg-pink-50/30">
+                <tr class="border-b hover:bg-gray-50">
                     <td class="p-3 font-medium">{{ $item->product_nama }}</td>
 
                     <td class="p-3">
@@ -93,7 +108,7 @@
                         {{ ucfirst($item->product_platform) }}
                     </td>
 
-                    <td class="p-3 font-bold text-pink-500">
+                    <td class="p-3 font-bold" style="color: {{ $primary }};">
                         {{ number_format($item->product_total_click) }}
                     </td>
 
@@ -123,9 +138,11 @@
 
 <script>
     $(function () {
-        $('#analyticsTable').DataTable({
-            pageLength: 10
-        });
+        if (!$.fn.DataTable.isDataTable('#analyticsTable')) {
+            $('#analyticsTable').DataTable({
+                pageLength: 10
+            });
+        }
 
         const ctx = document.getElementById('clickChart');
 
@@ -134,7 +151,7 @@
             data: {
                 labels: [
                     @foreach($data->take(10) as $item)
-                        "{{ $item->product_nama }}",
+                        @json($item->product_nama),
                     @endforeach
                 ],
                 datasets: [{
@@ -143,8 +160,41 @@
                         @foreach($data->take(10) as $item)
                             {{ $item->product_total_click }},
                         @endforeach
-                    ]
+                    ],
+                    backgroundColor: @json($primary),
+                    borderColor: @json($accent),
+                    borderWidth: 1,
+                    borderRadius: 10
                 }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#334155'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#64748b'
+                        },
+                        grid: {
+                            color: '#e5e7eb'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#64748b'
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
             }
         });
     });
